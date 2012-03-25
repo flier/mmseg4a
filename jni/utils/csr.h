@@ -36,7 +36,7 @@
 typedef std::wstring unistring;
 #else
 */
-typedef std::basic_string<unsigned short> unistring;
+typedef ::std::basic_string<unsigned short> unistring;
 //#endif
 
 #ifdef WIN32

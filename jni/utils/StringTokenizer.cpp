@@ -1,6 +1,6 @@
 #include "StringTokenizer.h"
 
-namespace csr { 
+namespace csr {
 
 StringTokenizer::StringTokenizer(const std::string& _str, const std::string& _delim)
 {
@@ -167,5 +167,5 @@ std::string StringTokenizer::filterNextToken(const std::string& filterStr)
    return tmp_str;
 }
 
-}; //namespace csr { 
+}; //namespace csr {
 

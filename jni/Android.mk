@@ -16,6 +16,7 @@ LIBMMSEG_SOURCES	:= 	css/mmthunk.cpp \
 						iniparser/iniparser.c \
 						utils/csr_mmap.c \
 						utils/csr_utils.c \
+						utils/StringTokenizer.cpp \
 						utils/Utf8_16.cpp 
 
 LOCAL_MODULE    	:= mmseg4a
@@ -23,5 +24,6 @@ LOCAL_MODULE    	:= mmseg4a
 LOCAL_C_INCLUDES	:= $(LIBMMSEG_INCLUDES)
 LOCAL_SRC_FILES 	:= mmseg4a.cpp $(LIBMMSEG_SOURCES)
 LOCAL_CPP_FEATURES 	:= rtti
+LOCAL_LDLIBS 		:= -llog -ldl
 
 include $(BUILD_SHARED_LIBRARY)

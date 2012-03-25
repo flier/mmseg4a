@@ -21,10 +21,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>
 #include <string>
 
-namespace csr { 
+namespace csr {
 
 class StringTokenizer
 {
@@ -50,6 +49,6 @@ class StringTokenizer
 
 };
 
-} //namespace csr { 
+} //namespace csr {
 
 #endif
