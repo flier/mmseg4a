@@ -16,7 +16,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration buildProperties="" description="" id="com.android.toolchain.gcc.1345745686" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactName="mmseg4a" buildProperties="" description="" id="com.android.toolchain.gcc.1345745686" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="com.android.toolchain.gcc.1345745686.399843934" name="/" resourcePath="">
 						<toolChain id="com.android.toolchain.gcc.231662360" name="com.android.toolchain.gcc" superClass="com.android.toolchain.gcc">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.android.targetPlatform.1157550713" name="Android Platform" osList="all" superClass="com.android.targetPlatform"/>
@@ -27,6 +27,15 @@
 							</builder>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.908609138" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="com.android.tool.compiler.g++.1552146863" name="Android G++" superClass="com.android.tool.compiler.g++">
+								<option id="gnu.cpp.compiler.option.include.paths.702356823" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/mmseg4a/jni/css}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/mmseg4a/jni/utils}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ANDROID_NDK_ROOT}/platforms/android-3/arch-x86/usr/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ANDROID_NDK_ROOT}/sources/cxx-stl/stlport/stlport&quot;"/>
+								</option>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.28041129" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="ANDROID=1"/>
+								</option>
 								<inputType id="com.android.tool.compiler.g++.input.1333854351" superClass="com.android.tool.compiler.g++.input"/>
 							</tool>
 							<tool id="com.android.tool.compiler.c.1948523869" name="Android GCC" superClass="com.android.tool.compiler.c">
@@ -55,12 +64,15 @@
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="mmseg4a.null.1057056171" name="mmseg4a"/>
 	</storageModule>
+	<storageModule moduleId="refreshScope" versionNumber="1">
+		<resource resourceType="PROJECT" workspacePath="/mmseg4a"/>
+	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.1345745686;com.android.toolchain.gcc.1345745686.399843934;com.android.tool.compiler.c.1948523869;com.android.tool.compiler.c.input.743130051">
+		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.1345745686;com.android.toolchain.gcc.1345745686.399843934;com.android.tool.compiler.g++.1552146863;com.android.tool.compiler.g++.input.1333854351">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.1345745686;com.android.toolchain.gcc.1345745686.399843934;com.android.tool.compiler.g++.1552146863;com.android.tool.compiler.g++.input.1333854351">
+		<scannerConfigBuildInfo instanceId="com.android.toolchain.gcc.1345745686;com.android.toolchain.gcc.1345745686.399843934;com.android.tool.compiler.c.1948523869;com.android.tool.compiler.c.input.743130051">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
