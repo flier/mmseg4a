@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">MMSeg for Android</string>
+    <string name="extracting_dic">Extracting dictionary, please wait...</string>
+    <string name="loading_dic">Loading dictionary, please wait...</string>
 </resources>
