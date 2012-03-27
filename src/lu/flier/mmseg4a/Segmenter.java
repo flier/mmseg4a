@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Segmenter 
@@ -44,12 +41,60 @@ public class Segmenter
 		return _mgr;
 	}
 	
-	class TokenIterator implements Iterator<String>
+	class StringTokenIterator implements Iterator<String>
+	{
+		private long _tokens;
+		
+		StringTokenIterator(String text)
+		{
+			_tokens = MMSegApi.SegmenterSegment(_seg, text);
+		}
+
+		public void dispose()
+		{
+			if (_tokens != 0)
+			{
+				MMSegApi.TokensDestroy(_tokens);
+				
+				_tokens = 0;
+			}
+		}
+		
+		@Override
+		protected void finalize() throws Throwable 
+		{
+			dispose();
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return !MMSegApi.SegmenterIsEnd(_seg);
+		}
+
+		@Override
+		public String next() {
+			if (MMSegApi.SegmenterIsEnd(_seg)) 
+				throw new NoSuchElementException();
+			
+			String token = MMSegApi.SegmenterNext(_seg);
+			
+			if (token == null) throw new NoSuchElementException();
+			
+			return token;
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();	
+		}
+	}
+	
+	class StreamTokenIterator implements Iterator<String>
 	{
 		private final BufferedReader _reader;
 		private long _tokens;
 		
-		TokenIterator(BufferedReader reader)
+		StreamTokenIterator(BufferedReader reader)
 		{
 			_reader = reader;
 		}
@@ -112,23 +157,50 @@ public class Segmenter
 		}
 	}
 	
-	class Tokens implements Iterable<String>
+	public interface Tokens extends Iterable<String>
+	{
+		String getTokens() throws IOException;
+	}
+	
+	public class StringTokens implements Tokens
+	{
+		private final String _text;
+		
+		StringTokens(String text)
+		{
+			_text = text;
+		}
+
+		@Override
+		public Iterator<String> iterator() {
+			return null;
+		}
+
+		@Override
+		public String getTokens() throws IOException {
+			return MMSegApi.SegmenterTokens(_seg, _text, '\t');
+		}
+		
+	}
+	
+	public class StreamTokens implements Tokens
 	{
 		private final BufferedReader _reader;
 		
-		Tokens(Reader reader)
+		StreamTokens(Reader reader)
 		{
 			_reader = new BufferedReader(reader);
 		}
 		
 		@Override
 		public Iterator<String> iterator() {
-			return new TokenIterator(_reader);
+			return new StreamTokenIterator(_reader);
 		}		
 		
-		public List<String> getTokens() throws IOException
+		@Override
+		public String getTokens() throws IOException
 		{
-			List<String> tokens = new ArrayList<String>();
+			StringBuffer sb = new StringBuffer();
 			
 			do
 			{
@@ -136,20 +208,25 @@ public class Segmenter
 				
 				if (line == null) break;
 				
-				tokens.addAll(MMSegApi.SegmenterTokens(_seg, line));
+				sb.append(MMSegApi.SegmenterTokens(_seg, line, '\t')).append('\t');
 			} while (_reader.ready());
 			
-			return tokens;
+			return sb.toString();
 		}
 	}
 	
 	public Tokens segment(String text)
 	{
-		return new Tokens(new StringReader(text));
+		return new StringTokens(text);
 	}
 	
 	public Tokens segment(InputStream is)
 	{
-		return new Tokens(new InputStreamReader(is, Charset.forName("UTF-16")));
+		return segment(is, "UTF-16");
+	}
+	
+	public Tokens segment(InputStream is, String encoding)
+	{
+		return new StreamTokens(new InputStreamReader(is, Charset.forName(encoding)));
 	}
 }

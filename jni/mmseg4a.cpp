@@ -11,6 +11,7 @@
 #define  LOG_FATAL(...)  __android_log_print(ANDROID_LOG_FATAL,LOG_TAG,__VA_ARGS__)
 
 #include <memory>
+#include <sstream>
 
 #include "mmseg4a.h"
 
@@ -19,14 +20,14 @@
 
 jint throwIOException(JNIEnv *pEnv, const char *msg)
 {
-	static jclass clsIOException = pEnv->FindClass("java/io/IOException");
+	static jclass clsIOException = (jclass) pEnv->NewGlobalRef(pEnv->FindClass("java/io/IOException"));
 
 	return pEnv->ThrowNew(clsIOException, msg);
 }
 
 jint throwNullPointerException(JNIEnv *pEnv)
 {
-	static jclass clsIOException = pEnv->FindClass("java/lang/NullPointerException");
+	static jclass clsIOException = (jclass) pEnv->NewGlobalRef(pEnv->FindClass("java/lang/NullPointerException"));
 
 	return pEnv->ThrowNew(clsIOException, "invalid parameter");
 }
@@ -190,16 +191,11 @@ jobject JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
 		const char *p = pEnv->GetStringUTFChars(text, NULL);
 		jsize len = pEnv->GetStringUTFLength(text);
 
-		LOG_DEBUG("segmenting text %d bytes", p, len);
-
 		css::Segmenter *seg = reinterpret_cast<css::Segmenter *>(obj);
 
 		seg->setBuffer((u1 *) p, (u4) len);
 
-		static jclass clsArrayList = pEnv->FindClass("java/util/ArrayList");
-		static jmethodID ctor = pEnv->GetMethodID(clsArrayList, "<init>", "()V");
-		static jmethodID add = pEnv->GetMethodID(clsArrayList, "add", "(Ljava/lang/Object;)Z");
-		jobject tokens = pEnv->NewObject(clsArrayList, ctor);
+		std::ostringstream oss;
 
 		while (true) {
 			u2 len = 0, symlen = 0;
@@ -207,14 +203,12 @@ jobject JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
 
 			if(!tok || !*tok || !len) break;
 
-			std::string str(tok, len);
-
-			pEnv->CallBooleanMethod(tokens, add, pEnv->NewStringUTF(str.c_str()));
+			oss << std::string(tok, len) << '\t';
 
 			seg->popToken(len);
 		}
 
-		return tokens;
+		return pEnv->NewStringUTF(oss.str().c_str());
 	}
 
 	return NULL;

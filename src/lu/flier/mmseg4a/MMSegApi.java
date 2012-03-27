@@ -1,6 +1,5 @@
 package lu.flier.mmseg4a;
 
-import java.util.List;
 
 public class MMSegApi {
 	static {
@@ -25,5 +24,5 @@ public class MMSegApi {
 	
 	public static native void TokensDestroy(long tokens);
 
-	public static native List<String> SegmenterTokens(long seg, String text);
+	public static native String SegmenterTokens(long seg, String text, char sep);
 }
