@@ -190,7 +190,7 @@ jobject JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
 		const char *p = pEnv->GetStringUTFChars(text, NULL);
 		jsize len = pEnv->GetStringUTFLength(text);
 
-		LOG_DEBUG("segment text %p:%d", p, len);
+		LOG_DEBUG("segmenting text %d bytes", p, len);
 
 		css::Segmenter *seg = reinterpret_cast<css::Segmenter *>(obj);
 
@@ -198,7 +198,7 @@ jobject JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
 
 		static jclass clsArrayList = pEnv->FindClass("java/util/ArrayList");
 		static jmethodID ctor = pEnv->GetMethodID(clsArrayList, "<init>", "()V");
-		static jmethodID add = pEnv->GetMethodID(clsArrayList, "add", "(java/lang/Object)Z");
+		static jmethodID add = pEnv->GetMethodID(clsArrayList, "add", "(Ljava/lang/Object;)Z");
 		jobject tokens = pEnv->NewObject(clsArrayList, ctor);
 
 		while (true) {

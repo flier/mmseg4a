@@ -25,7 +25,7 @@ public class DictionaryLoader
 	
 	class LoadDictionaryTask extends AsyncTask<Void, String, SegmenterManager> 
 	{	
-		private ProgressDialog _dlg;
+		private final ProgressDialog _dlg = new ProgressDialog(_ctxt);
 		
 		@Override
 		protected SegmenterManager doInBackground(Void... params) 
@@ -68,7 +68,6 @@ public class DictionaryLoader
 		@Override
 		protected void onPreExecute() 
 		{
-			_dlg = new ProgressDialog(_ctxt);
 			_dlg.setCancelable(true);
 			_dlg.setMessage(_ctxt.getString(R.string.loading_dic));
 			_dlg.show();
@@ -88,9 +87,18 @@ public class DictionaryLoader
 		}
 	}
 	
-	public AsyncTask<Void, String, SegmenterManager> load()
+	public AsyncTask<Void, String, SegmenterManager> asyncLoad()
 	{
 		return new LoadDictionaryTask().execute();
+	}
+	
+	public SegmenterManager load() throws IOException
+	{
+		File path = extractDictionary();
+		
+		Log.d(TAG, "loading dictionary from " + path.getAbsolutePath());
+		
+		return new SegmenterManager(path);
 	}
 	
 	private int copy(InputStream is, OutputStream os) throws IOException
