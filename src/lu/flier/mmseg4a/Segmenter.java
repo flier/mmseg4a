@@ -1,6 +1,14 @@
 package lu.flier.mmseg4a;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class Segmenter 
@@ -37,28 +45,59 @@ public class Segmenter
 	
 	class TokenIterator implements Iterator<String>
 	{
+		private final BufferedReader _reader;
 		private long _tokens;
 		
-		TokenIterator(long tokens)
+		TokenIterator(BufferedReader reader)
 		{
-			_tokens = tokens;
+			_reader = reader;
+		}
+		
+		public void dispose()
+		{
+			if (_tokens != 0)
+			{
+				MMSegApi.TokensDestroy(_tokens);
+				
+				_tokens = 0;
+			}
 		}
 		
 		@Override
 		protected void finalize() throws Throwable 
 		{
-			MMSegApi.TokensDestroy(_tokens);
-			
-			_tokens = 0;
+			dispose();
 		}
 		
 		@Override
 		public boolean hasNext() {
-			return !MMSegApi.SegmenterIsEnd(_seg);
+			try {
+				return !MMSegApi.SegmenterIsEnd(_seg) || _reader.ready();
+			} catch (IOException e) {
+				return false;
+			}
 		}
 
 		@Override
 		public String next() {
+			if (MMSegApi.SegmenterIsEnd(_seg)) 
+			{
+				dispose();
+				
+				try 
+				{
+					String line = _reader.readLine();
+					
+					if (line == null) throw new NoSuchElementException();
+					
+					_tokens = MMSegApi.SegmenterSegment(_seg, line);
+				} 
+				catch (IOException e) 
+				{
+					throw new NoSuchElementException();
+				}
+			}
+			
 			String token = MMSegApi.SegmenterNext(_seg);
 			
 			if (token == null) throw new NoSuchElementException();
@@ -74,21 +113,42 @@ public class Segmenter
 	
 	class Tokens implements Iterable<String>
 	{
-		private final long _tokens;
+		private final BufferedReader _reader;
 		
-		Tokens(long tokens)
+		Tokens(Reader reader)
 		{
-			_tokens = tokens;
+			_reader = new BufferedReader(reader);
 		}
 		
 		@Override
 		public Iterator<String> iterator() {
-			return new TokenIterator(_tokens);
+			return new TokenIterator(_reader);
 		}		
+		
+		public List<String> getTokens() throws IOException
+		{
+			List<String> tokens = new ArrayList<String>();
+			
+			do
+			{
+				String line = _reader.readLine();
+				
+				if (line == null) break;
+				
+				tokens.addAll(MMSegApi.SegmenterTokens(_seg, line));
+			} while (_reader.ready());
+			
+			return tokens;
+		}
 	}
 	
-	public Iterable<String> segment(String text)
+	public Tokens segment(String text)
 	{
-		return new Tokens(MMSegApi.SegmenterSegment(_seg, text));
+		return new Tokens(new StringReader(text));
+	}
+	
+	public Tokens segment(InputStream is)
+	{
+		return new Tokens(new InputStreamReader(is));
 	}
 }

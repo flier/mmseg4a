@@ -20,7 +20,7 @@
 					<folderInfo id="com.android.toolchain.gcc.1345745686.399843934" name="/" resourcePath="">
 						<toolChain id="com.android.toolchain.gcc.231662360" name="com.android.toolchain.gcc" superClass="com.android.toolchain.gcc">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.android.targetPlatform.1157550713" name="Android Platform" osList="all" superClass="com.android.targetPlatform"/>
-							<builder id="com.android.builder.1499663963" keepEnvironmentInBuildfile="false" managedBuildOn="false" superClass="com.android.builder">
+							<builder command="/Users/flier/Development/android-ndk-r7b/ndk-build" id="com.android.builder.1499663963" keepEnvironmentInBuildfile="false" managedBuildOn="false" superClass="com.android.builder">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="libs"/>
 								</outputEntries>
@@ -30,10 +30,10 @@
 								<option id="gnu.cpp.compiler.option.include.paths.702356823" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/mmseg4a/jni/css}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/mmseg4a/jni/utils}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ANDROID_NDK_ROOT}/platforms/android-3/arch-x86/usr/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ANDROID_NDK_ROOT}/sources/cxx-stl/stlport/stlport&quot;"/>
+									<listOptionValue builtIn="false" value="/Users/flier/Development/android-ndk-r7b/platforms/android-3/arch-x86/usr/include"/>
+									<listOptionValue builtIn="false" value="/Users/flier/Development/android-ndk-r7b/sources/cxx-stl/stlport/stlport"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.28041129" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<option id="gnu.cpp.compiler.option.preprocessor.def.28041129" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ANDROID=1"/>
 								</option>
 								<inputType id="com.android.tool.compiler.g++.input.1333854351" superClass="com.android.tool.compiler.g++.input"/>

@@ -180,3 +180,42 @@ void JNICALL Java_lu_flier_mmseg4a_MMSegApi_TokensDestroy
 		pEnv->DeleteGlobalRef(tokens->first);
 	}
 }
+
+jobject JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
+  (JNIEnv *pEnv, jclass, jlong obj, jstring text)
+{
+	if (0 == obj) {
+		throwNullPointerException(pEnv);
+	} else {
+		const char *p = pEnv->GetStringUTFChars(text, NULL);
+		jsize len = pEnv->GetStringUTFLength(text);
+
+		LOG_DEBUG("segment text %p:%d", p, len);
+
+		css::Segmenter *seg = reinterpret_cast<css::Segmenter *>(obj);
+
+		seg->setBuffer((u1 *) p, (u4) len);
+
+		static jclass clsArrayList = pEnv->FindClass("java/util/ArrayList");
+		static jmethodID ctor = pEnv->GetMethodID(clsArrayList, "<init>", "()V");
+		static jmethodID add = pEnv->GetMethodID(clsArrayList, "add", "(java/lang/Object)Z");
+		jobject tokens = pEnv->NewObject(clsArrayList, ctor);
+
+		while (true) {
+			u2 len = 0, symlen = 0;
+			char* tok = (char*)seg->peekToken(len,symlen);
+
+			if(!tok || !*tok || !len) break;
+
+			std::string str(tok, len);
+
+			pEnv->CallBooleanMethod(tokens, add, pEnv->NewStringUTF(str.c_str()));
+
+			seg->popToken(len);
+		}
+
+		return tokens;
+	}
+
+	return NULL;
+}
