@@ -182,14 +182,14 @@ void JNICALL Java_lu_flier_mmseg4a_MMSegApi_TokensDestroy
 	}
 }
 
-jobject JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
-  (JNIEnv *pEnv, jclass, jlong obj, jstring text)
+jstring JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
+  (JNIEnv *pEnv, jclass, jlong obj, jstring text, jchar sep)
 {
 	if (0 == obj) {
 		throwNullPointerException(pEnv);
 	} else {
 		const char *p = pEnv->GetStringUTFChars(text, NULL);
-		jsize len = pEnv->GetStringUTFLength(text);
+		jsize len = pEnv->GetStringUTFLength(text), count = 0;
 
 		css::Segmenter *seg = reinterpret_cast<css::Segmenter *>(obj);
 
@@ -203,10 +203,14 @@ jobject JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
 
 			if(!tok || !*tok || !len) break;
 
-			oss << std::string(tok, len) << '\t';
+			count++;
+
+			oss << std::string(tok, len) << (char) sep;
 
 			seg->popToken(len);
 		}
+
+		LOG_INFO("found %d tokens in %d bytes string", count, len);
 
 		return pEnv->NewStringUTF(oss.str().c_str());
 	}

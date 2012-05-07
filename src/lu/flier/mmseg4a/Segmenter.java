@@ -208,7 +208,9 @@ public class Segmenter
 				
 				if (line == null) break;
 				
-				sb.append(MMSegApi.SegmenterTokens(_seg, line, '\t')).append('\t');
+				String tokens = MMSegApi.SegmenterTokens(_seg, line, '\t');
+				
+				sb.append(tokens).append('\t');
 			} while (_reader.ready());
 			
 			return sb.toString();
