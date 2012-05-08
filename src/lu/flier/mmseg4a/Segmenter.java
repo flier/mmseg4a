@@ -13,16 +13,18 @@ public class Segmenter
 {
 	private final SegmenterManager _mgr;
 	private long _seg;
+	private final boolean _owner;
 	
-	Segmenter(SegmenterManager mgr, long seg)
+	Segmenter(SegmenterManager mgr, long seg, boolean owner)
 	{
 		_mgr = mgr;
 		_seg = seg;
+		_owner = owner;
 	}
 	
 	public void dispose()
 	{
-		if (_seg != 0) 
+		if (_owner && _seg != 0) 
 		{
 			MMSegApi.SegmenterDestroy(_seg);
 			

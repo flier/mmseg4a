@@ -34,6 +34,6 @@ public class SegmenterManager
 	
 	public Segmenter createSegmenter(boolean pooled)
 	{
-		return new Segmenter(this, MMSegApi.SegmenterManagerGetSegmenter(_mgr, pooled));
+		return new Segmenter(this, MMSegApi.SegmenterManagerGetSegmenter(_mgr, pooled), !pooled);
 	}
 }
