@@ -210,7 +210,7 @@ jstring JNICALL Java_lu_flier_mmseg4a_MMSegApi_SegmenterTokens
 			seg->popToken(len);
 		}
 
-		LOG_INFO("found %d tokens in %d bytes string", count, len);
+		LOG_DEBUG("found %d tokens in %d bytes string", count, len);
 
 		return pEnv->NewStringUTF(oss.str().c_str());
 	}
